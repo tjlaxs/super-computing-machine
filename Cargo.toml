@@ -1,0 +1,7 @@
+[package]
+name = "super-computing-machine"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+github_api = { path = "./crates/github_api" }
