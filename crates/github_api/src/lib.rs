@@ -1,14 +1,8 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+use std::io::Read;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub fn repo_languages() -> Option<String> {
+    let mut res = reqwest::blocking::get("http://httpbin.org/get").ok()?;
+    let mut body = String::new();
+    let _ = res.read_to_string(&mut body);
+    Some(body)
 }

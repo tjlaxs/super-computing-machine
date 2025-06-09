@@ -1,5 +1,7 @@
-use github_api::add;
+use github_api::repo_languages;
 
 fn main() {
-    println!("Hello, world! {}", add(1, 2));
+    let res = repo_languages();
+
+    println!("Response:\n{:?}", res);
 }
