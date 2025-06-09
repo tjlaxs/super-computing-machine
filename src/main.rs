@@ -1,7 +1,9 @@
-use github_api::repo_languages;
+use github_api::new_client;
 
-fn main() {
-    let res = repo_languages();
+#[tokio::main]
+async fn main() {
+    let client = new_client();
+    let res = client.repo_languages().await;
 
     println!("Response:\n{:?}", res);
 }

@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 github_api = { path = "./crates/github_api" }
+tokio = { version ="1", features = ["macros", "rt-multi-thread"]}
