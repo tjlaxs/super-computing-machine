@@ -1,9 +1,22 @@
 use std::env::var;
 
 use reqwest::header::{HeaderMap, HeaderValue};
+use serde::{Deserialize, Serialize};
 
 pub struct GithubApi {
     client: reqwest::Client,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+#[serde(transparent)]
+pub struct Repos {
+    pub repos: Vec<Repo>,
+}
+#[derive(Deserialize, Serialize, Debug)]
+pub struct Repo {
+    pub name: String,
+    pub url: String,
+    pub full_name: String,
 }
 
 impl GithubApi {
@@ -21,17 +34,18 @@ impl GithubApi {
         map
     }
 
-    pub async fn user_repos(&self, user: &str) -> Option<String> {
+    pub async fn user_repos(&self, user: &str) -> Option<Repos> {
         let req = self
             .client
-            .get(format!("https://api.github.com/users/{user}/repos"))
+            .get(format!(
+                "https://api.github.com/users/{user}/repos?per_page=100"
+            ))
             .headers(self.headers());
 
         println!("Request: {:?}", req);
 
-        let res = req.send().await.unwrap().text().await.unwrap();
-
-        Some(res.to_string())
+        let req_res = req.send().await.unwrap().text().await.unwrap();
+        serde_json::from_str(&req_res.to_string()).ok()
     }
 
     pub async fn repo_languages(&self, user: &str, repo: &str) -> Option<String> {
